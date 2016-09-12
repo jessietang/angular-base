@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<textArea ng-disabled="isDisabled">wait5seconds</textArea>
+<script src="angular.min.js"></script>
+<script>
+    angular.module('myApp',[])
+            .run(function($rootScope, $timeout){
+                $rootScope.isDisabled = true;
+                $timeout(function(){
+                    $rootScope.isDisabled = false;
+                },5000);
+            });
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ng-controller="parentController">
+{{someModel.someValue}}
+<button ng-click="parentAction()">parent button</button>
+<div ng-controller="childController">
+    {{someModel.someValue}}
+    <button ng-click="childAction()">child button</button>
+</div>
+<!--
+将模型对象的某个属性设置为字符串，他会通过引用进行共享
+此例子中的子控制器是引用someValue-->
+<script src="angular.min.js"></script>
+<script>
+    angular.module('myApp',[])
+            .controller('parentController', function($scope){
+                $scope.someModel = {
+                    someValue: 'hello computer'
+                };
+                $scope.parentAction = function(){
+                    $scope.someModel.someValue = 'hello human, from parent';
+                };
+            })
+            .controller('childController', function($scope){
+                $scope.childAction = function(){
+                    $scope.someModel.someValue = 'hello human, from child';
+                };
+            });
+</script>
+</body>
+</html>

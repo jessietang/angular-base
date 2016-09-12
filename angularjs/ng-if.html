@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ng-controller="myController">
+<div ng-if="2+2===5">
+    we can not see this, not even in the source code
+</div>
+
+<div ng-if="2+2===4">
+        Hi, i do exist
+</div>
+<script src="angular.min.js"></script>
+<script>
+angular.module('myApp',[])
+        .controller('myController', function(){});
+</script>
+</body>
+</html>

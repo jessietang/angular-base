@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        angularjs 三种自定义作用域绑定方式：
+            1.字符串绑定， @
+            2.变量绑定， =
+            3.方法绑定， $
+    </title>
+</head>
+<body ng-controller="myCtrl">
+
+    <h2>1.字符串绑定， @</h2>
+    <div string-bind say="test string"></div>
+
+    <h2>2.变量绑定， =</h2>
+    <input type="text" ng-model="testName"/>
+    <div var-bind name="testName"></div>
+
+    <h2>3.方法绑定， &</h2>
+    <div function-bind say="test(name)"></div>
+
+
+    <script src="angular.min.js"></script>
+    <script type="text/javascript">
+
+        var app = angular.module('myApp',[]);
+        app.controller('myCtrl', ['$scope', function($scope){
+            $scope.say = "test string";
+            $scope.testName="my name is jessie";
+            $scope.username = '111';
+            $scope.test = function(name){
+                console.log('say hello to '+ name);
+            };
+        }])
+        .directive('stringBind', function(){
+                    return {
+                        restrict: 'A',
+                        replace: true,
+                        scope: {
+                            say: '@'
+                        },
+                        template: '<div>{{say}}</div>'
+                    };
+                })
+                .directive('varBind', function(){
+                    return {
+                        restrict: 'A',
+                        replace: true,
+                        scope: {
+                            name: '='
+                        },
+                        template: '<input type="text" ng-model="name"/>'
+                    };
+                })
+                .directive('functionBind', function(){
+                    return {
+                        restrict: 'A',
+                        replace: true,
+                        scope: {
+                            say: '&'
+                        },
+                        template: '<div>' +
+                                '<input type="text" ng-model="username"/>'+
+                        '<button ng-click="say({name: username})">click</button>' +
+                        '</div>'
+                    };
+                });
+    </script>
+</body>
+</html>

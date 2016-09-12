@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>在屏幕可视的区域内使用{{}}会导致页面加载时未渲染的元素发生闪烁，
+        用ng-bind可以避免这个问题</title>
+</head>
+<body ng-controller="myController">
+<div ng-init="greeting='hello amy'">
+    <p>{{greeting}}</p>
+</div>
+
+<div ng-init="greeting='hello amy'">
+    <p ng-bind="greeting"></p>
+</div>
+
+<!--
+我们应该始终用ngModel来绑定$scope上一个[数据模型]内的属性，而不是$scope上的属性，
+这样可以避免在作用域或者后代作用域中发生属性覆盖。
+-->
+<div ng-model="messageModel.message" ng-init="messageModel.message='i am amy'">
+    <p ng-bind-template="{{messageModel.message}}  {{greeting}}"></p>
+</div>
+<script src="angular.min.js"></script>
+<script>
+angular.module('myApp',[])
+        .controller('myController', function($scope){})
+</script>
+</body>
+</html>

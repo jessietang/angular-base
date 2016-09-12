@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        ng-form用来在一个表单内嵌套另一个表单， 普通的html <form></form>标签不允许嵌套，
+        但是ng-form可以
+    </title>
+    <style>
+        .has-error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<form action=""
+        name="signup_form"
+        ng-controller="formController"
+        ng-submit="submitForm()" novalidate>
+    <div ng-repeat="field in fields"
+            ng-form="signup_form_input">
+        <input type="text"
+                name="dynamic_input"
+                ng-required="field.isRequired"
+                ng-model="field.name"
+                placeholder="{{field.placeholder}}"/>
+    </div>
+    <div ng-show="signup_form_input.dynamic_input.$dirty &&
+    signup_form_input.dynamic_input.$invalid">
+        <!--注意：signup_form_input-->
+        <span class="has-error"
+                ng-show="signup_form_input.dynamic_input.$error.required">
+            The field is required.
+        </span>
+    </div>
+    <button type="submit"
+            ng-disabled="signup_form.$invalid">submit all</button>
+</form>
+
+<script src="angular.min.js"></script>
+<script>
+    angular.module('myApp',[])
+            .controller('formController', function($scope){
+                $scope.fields = [
+                    {name:'',placeholder:'username', isRequired: true},
+                    {name:'',placeholder:'password', isRequired:true},
+                    {name:'',placeholder:'email(optional)', isRequired:false}
+                ];
+                $scope.submitForm = function(){
+                    alert('it works!');
+                };
+            });
+</script>
+</body>
+</html>

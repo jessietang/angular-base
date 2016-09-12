@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>angularjs route</title>
+    <link rel="stylesheet" href="../../bootstrap-3.3.5/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container" ng-app="routingDemoApp">
+    <div class="row">
+        <div class="col-md-3">
+            <a href="#/">index</a>
+        </div>
+        <div class="col-md-3">
+            <a href="#/computer">computer</a>
+        </div>
+        <div class="col-md-3">
+            <a href="#/map">map</a>
+        </div>
+        <div class="col-md-3">
+            <a href="#/phone">phone</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div ng-view></div>
+        </div>
+    </div>
+    <div style="width:300px;height:300px;background-color:rosybrown;">
+        <ng-view></ng-view>  <!-- ng-view是一个优先级为1000的终极指令，
+        angulsrjs不会运行同一个元素上的低优先级指令 -->
+    </div>
+
+
+    <div ng-controller="myCtrl" ng-click="common.sayHello('hello jessie');">click me</div>
+</div>
+
+
+<!--<script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>-->
+<script src="angular.min.js"></script>
+<script src="http://apps.bdimg.com/libs/angular-route/1.3.13/angular-route.js"></script> <!--在angularjs只好引用angular-route-->
+<script type="text/javascript">
+    angular.module("routingDemoApp",['ngRoute'])  //把 ngRoute 模块在我们的应用中当做依赖加载进来
+            .controller("routeIndexCtrl", function($scope){
+                $scope.hello = "this is the index page";
+            })
+            .controller("routeComputerCtrl", function($scope){
+                $scope.hello = "this is the computer page";
+            })
+            .controller("routeMapCtrl", function($scope){
+                $scope.hello = "this is the map page"
+            })
+            .controller("routePhoneCtrl", function($scope){
+                $scope.hello = "this is the phone page";
+            })
+            .config(['$routeProvider', function($routeProvider){
+                $routeProvider
+                        .when('/',{
+                            templateUrl: 'routeIndex.html',
+                            controller: 'routeIndexCtrl'
+                        })
+                        .when('/computer',{
+                            templateUrl: 'routeComputer.html',
+                            controller: 'routeComputerCtrl'
+                        })
+                        .when('/map',{
+                            templateUrl: 'routeMap.html',
+                            controller: 'routeMapCtrl'
+                        })
+                        .when('/phone',{
+                            templateUrl: 'routePhone.html',
+                            controller: 'routePhoneCtrl'
+                        })
+                        .otherwise({
+                            redirectTo: '/'
+                        });
+            }])
+            .factory('greeter', function(){ // 自定义服务
+                return {
+                    greet: function(msg){
+                        alert(msg);
+                    }
+                }
+            })
+            .controller('myCtrl',['$scope','greeter', function($scope, greeter){ //依赖注入
+                $scope.common = {
+                    sayHello: function(sb){
+                        greeter.greet(sb);
+                    },
+                    doSth: function(sth){
+                        greeter.greet(sth);
+                    }
+                };
+
+            }]);
+</script>
+</body>
+</html>

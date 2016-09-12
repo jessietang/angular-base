@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="bootstrap.min.css"/>
+    <style>
+        .has-error{
+            color: red;
+        }
+        .ng-focused {
+            border-color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form action=""
+                      novalidate
+                      name="signup_form"
+                        ng-submit="signupForm()"
+                        ng-controller="signupController">
+                    <fieldset>
+                        <legend>sign up form</legend>
+                        <label for="">Your name</label>
+                        <input type="text"
+                               name="name"
+                               ng-model="signup.name"
+                                ng-minlength="3"
+                                ng-maxlength="20"
+                                required ngFocus/>
+                        <div class="has-error"
+                                ng-show="signup_form.name.$dirty && signup_form.name.$invalid &&
+                                !signup_form.name.$focused">  <!-- !signup_form.name.$focused -->
+                            <small class="has-error"
+                                   ng-show="signup_form.name.$error.required">
+                                Your name is required.
+                            </small>
+                            <small class="has-error"
+                                   ng-show="signup_form.name.$error.minlength">
+                                Your name is required to be at least 3 characters.
+                            </small>
+                            <small class="has-error"
+                                   ng-show="signup_form.name.$error.maxlength">
+                                Your name cannot be longer than 20 characters.
+                            </small>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="angular.min.js"></script>
+    <script>
+        angular.module('myApp',[])
+                .controller('signupController', function($scope){
+                    $scope.signup = {
+                        "name":""
+                    };
+                })
+                .directive('ngFocus',function(){ //自定义一个ngFocus指令 在写页面时，可能会遇到一样的、可重用的，就这样写，然后调用
+                    var FOCUS_CLASS = "ng-focused";
+                    return {
+                        restrict:'A', // A --> attribute属性
+                        require: 'ngModel',
+                        link: function(scope, element, attrs, ctrl){
+                            ctrl.$focused = false;
+                            element.bind('focus', function(evt){
+                                element.addClass(FOCUS_CLASS);
+                                scope.$apply(function(){
+                                    ctrl.$focused = true;
+                                });
+                            }).bind('blur', function(evt){
+                                element.removeClass(FOCUS_CLASS);
+                                scope.$apply(function(){
+                                    ctrl.$focused = false;
+                                });
+                            });
+                        }
+                    };
+                });
+    </script>
+</body>
+</html>

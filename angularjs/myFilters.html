@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义过滤器</title>
+</head>
+<body>
+<div ng-controller="myController">
+    <input type="text" ng-model="myInput"/>
+    <h4>{{myInput | lowercase | capitalize}}</h4>
+</div>
+<script src="angular.min.js"></script>
+<script>
+    angular.module('myApp',[])
+            .controller('myController',function($scope){
+                $scope.myInput = 'gdGDshs';
+            })
+            //自定义过滤器capitalize，实现字符串首字母大写
+            .filter('capitalize', function(){
+                return function(input){
+                    if(input){
+                        return input[0].toUpperCase()+input.slice(1);
+                    }
+                };
+            });
+</script>
+</body>
+</html>

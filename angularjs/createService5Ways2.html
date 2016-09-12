@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        用3种不同的方式（factory, service, provider）来构建同一个服务器
+    </title>
+    <!--
+     在Angular里面，services作为单例对象在需要到的时候被创建，只有在应用生命周期结束的时候（关闭浏览器）才会
+     被清除。而controllers在不需要的时候就会被销毁了。
+    这就是为什么使用controllers在应用里面传递数据不可靠的原因，特别是使用routing的时候。Services are designed
+     to be the glue between controllers, the minions of data, the slaves of functionality, the
+     worker-bees of our application（就是说services在应用的controllers、 方法、数据之前起到了很关键的作用）
+
+
+
+ AngularJS中使用DI添加Service的三种方法：
+
+方式1（内联注解，推荐使用）：
+
+app.controller('myController', ['$scope', 'dateFilter', function ($scope, dateFilter) { }]);
+
+
+
+方式2（$inject注解）：
+
+1 var MyController = function($scope, dateFilter) {
+2   // ...
+3 }
+4 MyController.$inject = ['$scope', 'dateFilter'];
+5 someModule.controller('MyController', MyController);
+
+
+
+方式3（隐式注解，不推荐使用）：
+
+app.controller('myController', function ($scope, dateFilter) { });
+
+
+
+    -->
+</head>
+<body>
+    <div ng-controller="myFactoryCtrl" ng-click="updateArtist();submitArtist();">click me{{data}}</div>
+
+    <div ng-controller="myServiceCtrl">{{data}}</div>
+
+    <div ng-controller="myProviderCtrl" ng-click="submitArtist()">{{data}}{{data.thingFromConfig}}</div>
+
+    <script src="angular.min.js"></script>
+    <script type="text/javascript">
+        var app = angular.module('myApp',[]);
+
+
+        // factory
+        //  在service里面当我们仅仅需要的是一个方法和数据的集合且不需要处理复杂的逻辑的时候，
+        // factory()是一个非常不错的选择。
+        //注意：需要使用.config()来配置service的时候不能使用factory()方法
+
+        app.factory('myFactory', function($http, $q){
+            var service = {};
+            var baseUrl = 'https://itunes.apple.com/search?term=';
+            var _artist = '';
+            var _finialUrl = '';
+
+            var makeUrl = function(){
+                _artist = _artist.split('.').join('+');
+                _finialUrl = baseUrl + _artist + '&callback=JSON_CALLBACK';
+                return _finialUrl;
+            };
+            service.setArtist = function(artist){ //把可以从控制器中访问的方法添加到service上。
+                _artist = artist;
+            };
+            service.getArtist = function(){  //把可以从控制器中访问的方法添加到service上。
+                return _artist;
+            };
+            service.callItunes = function(){  //把可以从控制器中访问的方法添加到service上。
+                makeUrl();
+                var deferred = $q.defer();
+                $http({
+                    method: 'JSONP',
+                    url: _finialUrl
+                }).success(function(data){
+                    deferred.resolve(data);
+                }).error(function(){
+                    deferred.reject('there was an error');
+                });
+                return deferred.promise;
+            };
+            return service;
+        });
+
+        app.controller('myFactoryCtrl', ['$scope', 'myFactory', function($scope, myFactory){
+            $scope.data = {};
+            $scope.data.artist = 'meme';
+            $scope.updateArtist = function(){
+                myFactory.setArtist($scope.data.artist);
+            };
+
+            $scope.submitArtist = function(){
+                myFactory.callItunes()
+                        .then(function(data){
+                            $scope.data.artistData = data;
+                        }, function(data){
+                            alert(data);
+                        });
+            };
+        }]);
+
+
+        //service
+        // service()方法很适合使用在功能控制比较多的service里面
+        //注意：需要使用.config()来配置service的时候不能使用service()方法
+
+        app.service('myService', function($http, $q){
+            var baseUrl = 'https://itunes.apple.com/search?term=';
+            var _artist = '';
+            var _finialUrl = '';
+
+            var makeUrl = function(){
+                _artist = _artist.split('.').join('+');
+                _finialUrl = baseUrl + _artist + '&callback=JSON_CALLBACK';
+                return _finialUrl;
+            };
+
+            this.getArtist = function(){  //把可以从控制器中访问的方法添加到‘this’上。
+                return _artist;
+            };
+            this.setArtist = function(artist){  //把可以从控制器中访问的方法添加到‘this’上。
+                _artist = artist;
+            };
+            this.callItunes = function(){ //把可以从控制器中访问的方法添加到‘this’上。
+                makeUrl();
+                var deferred = $q.defer();
+                $http({
+                    method: 'JSONP',
+                    url: _finialUrl
+                }).success(function(data){
+                    deferred.resolve(data);
+                }).error(function(){
+                    deferred.reject('there was an error');
+                });
+                return deferred.promise;
+            };
+        });
+        app.controller('myServiceCtrl', ['$scope', 'myService', function($scope, myService){
+            $scope.data = {};
+            $scope.data.artist = 'youyouyou';
+            $scope.updateArtist = function(){
+                myService.setArtist($scope.data.artist);
+            };
+        }]);
+
+        //provider 要记住的关于Provider的最重要的事情是，它们是你可以传递到应用程序的app.config部分唯一
+        // 的服务。如果你需要在你的服务对象可以在你的应用程序之外任何地方都可用之前改变它的某些部分，这是非
+        // 常重要的。
+
+        //必须要注意的一点是只有这些变量和函数是可以在我们的app.config函数中访问的。这曾一度使我感到困惑，
+        // 所以你最好也要知道这点不同之处。你可以把Provider想象成由两部分组成。第一部分的变量和函数是可以
+        // 在app.config函数中访问的，因此你可以在它们被其他地方访问到之前来修改它们（如上所示）。第二部分
+        // （如下所示） 的变量和函数是可以在任何传入了’myProvider‘的控制器中进行访问的。
+
+        // 当你使用Provider创建一个service时，唯一的可以在你的控制器中访问的属性和方法是通过$get()函数
+        // 返回内容。下面的代码将$get方法写在了’this‘（最终会被函数返回）上。现在，$get函数会返回所有我
+        // 们希望在控制器中进行访问的方法和属性。
+        app.provider('myProvider', function(){
+            var _this = this;
+            // 第一部分 start
+            var baseUrl = 'https://itunes.apple.com/search?term=';
+            var _artist = '';
+            var _finialUrl = '';
+            var thingFromConfig = '';
+
+            var makeUrl = function(){
+                _artist = _artist.split('.').join('+');
+                _finialUrl = baseUrl + _artist + '&callback=JSON_CALLBACK';
+                return _finialUrl;
+            };  // 第一部分  end
+
+
+
+            //第二部分  start
+            _this.$get = function($http, $q){
+                return {
+                    getArtist: function(){
+                        return _artist;
+                    },
+                    setArtist: function(artist){
+                        _artist = artist;
+                    },
+                    callItunes: function(){
+                        makeUrl();
+                        var deferred = $q.defer();
+                        $http({
+                            method: 'JSONP',
+                            url: _finialUrl
+                        }).success(function(data){
+                            deferred.resolve(data);
+                        }).error(function(){
+                            deferred.reject('there was an error');
+                        });
+                        return deferred.promise;
+                    },
+                    thingOnConfig: _this.thingFromConfig  //注意是this.thingFromConfig, 而不是thingFromConfig
+                }
+            };  // 第二部分  end
+
+        });
+        app.config(function(myProviderProvider){ // myProviderProvider == 服务名+Provider
+            myProviderProvider.thingFromConfig = "this sentence was set in app.config";
+            // 是myProviderProvider.thingFromConfig， 不是myProviderProvider.thingOnConfig
+            //第一部分的变量和函数是可以在app.config函数中访问的，因此你可以在它们被其他地方
+            // 访问到之前来修改它们（如上所示）
+        });
+        app.controller('myProviderCtrl', ['$scope', 'myProvider', function($scope, myProvider){
+            $scope.data = {};
+            $scope.data.artist = 'aaa';
+            $scope.updateArtist = function(){
+                myProvider.setArtist($scope.data.artist);
+            };
+            $scope.submitArtist = function(){
+                myProvider.callItunes()
+                        .then(function(data){
+                            $scope.data.artistData = data;
+                        },function(data){
+                            alert(data);
+                        });
+            };
+            $scope.data.thingFromConfig = myProvider.thingOnConfig;
+        }]);
+
+
+
+
+    </script>
+</body>
+</html>

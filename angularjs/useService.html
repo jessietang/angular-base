@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ng-app="myApp">
+    <div ng-controller="ServiceController">
+        <label for="username">Type in a Github username</label>
+        <input type="text" ng-model="username" placeholder="Enter a Github username"/>
+        <ul>
+            <li ng-repeat="event in events">
+                {{event.actor.login}} {{event.repo.name}}
+            </li>
+        </ul>
+    </div>
+<script src="angular.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp',[])
+            .factory('githubService', function($http){
+                var githubUrl = 'http://api.github.com',
+                        githubUsername;
+                var runUserRequest = function(username, path){
+                    return $http({
+                        method: 'JSONP',
+                        url: githubUrl + '/users' + username + '/' + path + '?callback=JSON_CALLBACK'
+                    });
+                };
+                return {
+                    events: function(username){
+                        return runUserRequest(username, 'events');
+                    },
+                    setUsername: function(username){
+                        githubUsername = username;
+                    }
+                }
+            })
+            .controller('ServiceController', function($scope, $timeout, githubService){
+                var timeout;
+                $scope.$watch('username', function(newUsername){
+                    if(newUsername){
+                        if(timeout) $timeout.cancel(timeout);
+                        timeout = $timeout(function(){
+                            githubService.events(newUsername)
+                                    .success(function(data, status, headers){
+                                        $scope.events = data.data;
+                                    });
+                        }, 350);
+                    }
+
+                    $scope.setUsername = githubService.setUsername;
+
+                });
+            });
+</script>
+</body>
+</html>

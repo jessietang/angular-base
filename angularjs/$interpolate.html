@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div ng-controller="myController">
+        <input type="email" ng-model="toWho" placeholder="recipient(to who)"/><br/>
+        <textArea ng-model="emailBody" placeholder="请输入邮件内容"></textArea>
+        <h3>{{previewText}}</h3>
+    </div>
+    <script src="angular.min.js"></script>
+    <script type="text/javascript">
+        angular.module('myApp',[]).
+                controller('myController',function($scope,$interpolate){
+                    //设置监听
+                    $scope.$watch('emailBody', function(body){
+                        if(body){
+                            var template = $interpolate(body);
+                            $scope.previewText = template({to:$scope.toWho});
+                        }
+                    });
+                });
+    </script>
+</body>
+</html>

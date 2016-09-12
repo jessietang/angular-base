@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        嵌入， 通常用来创建可复用的组件，
+        典型的例子就是 模态对话框 and 导航栏
+    </title>
+    <style>
+        #sidebox .sidebox {
+            width: 500px;
+        }
+        #sidebox .sidebox .content {
+            padding: 10px;
+            border: 1px dotted pink;
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+        .header {
+            border-bottom: 1px solid red;
+        }
+        #sidebox .tagcloud a {
+            color: blue;
+            text-decoration: none;
+        }
+        #sidebox .tagcloud a:hover {
+            color: red;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<!--此处来创建一个可复用的 侧边栏 -->
+    <div id="sidebox" ng-controller="myController">
+
+        <div sidebox title="Links">
+            <ul>
+                <li>FirstLink</li>
+                <li>SecondLink</li>
+            </ul>
+        </div>
+
+        <div sidebox title="TagCloud">
+            <div class="tagcloud">
+                <a href="">111</a>
+                <a href="">222</a>
+                <a href="">333</a>
+                <a href="">444</a>
+                <a href="">555</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="angular.min.js"></script>
+    <script>
+        angular.module('myApp', [])
+                .directive('sidebox', function(){ //这段代码告诉angularJs编译器，将
+                // 他从dom元素中获取到的内容放到他发现ng-transclude指令的地方
+                    return {
+                        restrict:'EA',
+                        replace:true,
+                        scope:{
+                            title:'@'
+                        },
+                        transclude: true,
+                        template:'<div class="sidebox">' +
+                        '<div class="content">' +
+                        '<h2 class="header">{{title}}</h2><span class="" ng-transclude></span>' +
+                        '</div>' +
+                        '</div>'
+                    };
+                })
+                .controller('myController', function($scope){}); //这个必须写！！！
+    </script>
+</body>
+</html>

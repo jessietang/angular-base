@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="bootstrap.min.css"/>
+</head>
+<body>
+<div ng-controller="myController">
+    <button class="btn btn-success" ng-click="add(5)">add</button>
+    <a href="" class="btn btn-danger" ng-click="subtract(5)">subtract</a>
+    <h4>current number is:{{counter}}</h4>
+    <h3>the people is {{person.name}}, she is a {{person.sex}}</h3>
+
+</div>
+<script src="angular.min.js"></script>
+<script type="text/javascript">
+    angular.module("myApp",[]).
+            controller("myController", function($scope){
+                $scope.counter = 0;
+                $scope.person = {
+                    name:"jessie",
+                    sex:"girl"
+                };
+                $scope.add = function(num){
+                    $scope.counter += num;
+                };
+                $scope.subtract = function(num){
+                    $scope.counter -= num;
+                };
+            });
+</script>
+</body>
+</html>

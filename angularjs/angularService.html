@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        1.有个 $location 服务，它可以返回当前页面的 URL 地址。
+        AngularJS 会一直监控应用，处理事件变化， AngularJS 使用 $location 服务比使用 window.location 对象更好。
+        2.$http 是 AngularJS 应用中最常用的服务。服务向服务器发送请求，应用响应服务器传送过来的数据。
+        3.AngularJS $timeout 服务对应了 JS window.setTimeout 函数。
+        4.AngularJS $interval 服务对应了 JS window.setInterval 函数。
+        5.创建自定义服务。当你创建了自定义服务，并连接到你的应用上后，你可以在控制器，指令，过滤器或其他服务中使用它。
+    </title>
+</head>
+<body>
+<div ng-controller="myController">{{myWelcome}}</div>
+
+<div ng-controller="myController2">{{myUrl}}</div>
+
+<div ng-controller="myController3">{{myHeader}}</div>
+
+<div ng-controller="myController4">now time: {{nowTime}}</div>
+
+<div ng-controller="myController5">将数字255转换成16进制为：{{result}}</div>
+
+<div ng-controller="myController6">
+    <ul>
+        <li ng-repeat="x in myArr">{{x | myFormat}}</li>
+    </ul>
+</div>
+
+<script type="text/javascript" src="angular.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp',[])
+            .controller('myController', function($scope,$http){
+                $http.get('welcome.html').then(function(response){
+                    $scope.myWelcome = response.data;
+                });
+            }).controller('myController2', function($scope,$location){
+                $scope.myUrl = $location.absUrl();
+            }).controller('myController3', function($scope, $timeout){
+                $scope.myHeader = "hello world!";
+                $timeout(function(){
+                    $scope.myHeader = "How are you today?"
+                },1000);
+            }).controller('myController4', function($scope, $interval){
+                $scope.nowTime = new Date().toLocaleTimeString();
+                $interval(function(){
+                    $scope.nowTime = new Date().toLocaleTimeString();
+                },1000);
+            })
+            .service('myService', function(){  //自定义服务
+                this.myFun = function(x){
+                    return x.toString(16);
+                };
+            })
+            .controller('myController5', function($scope, myService){ //使用自定义的的服务myService,将一个数字转换为16进制数:
+                $scope.result = myService.myFun(255);
+            })
+            .filter('myFormat', ['myService', function(myService){//在过滤器 myFormat 中使用服务
+                return function(x){
+                    return myService.myFun(x);
+                };
+            }])
+            .controller('myController6', function($scope){
+                $scope.myArr = [255,268,280];
+            });
+</script>
+</body>
+</html>

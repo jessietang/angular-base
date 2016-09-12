@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>angular1.3+,新增了一个ngMessages指令，用来做form表单验证
+        ng-messages-include="templates/errors.html" 有点问题
+    </title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="" novalidate name="signup_form"
+                        ng-controller="signupController"
+                        ng-submit="signupForm()">
+                    <fieldset>
+                        <legend>sign up form</legend>
+                        <input type="text"
+                                name="name"
+                                ng-model="signup.name"
+                                ng-minlength="3"
+                                ng-maxlength="20" required/>
+                        <div class="has-error"
+                             ng-messages="signup_form.name.$error"
+                              ng-messages-multiple >
+                            <div ng-message="required">make sure you enter your name.</div>
+                            <div ng-message="minlength">your name must be at least 3 characters.</div>
+                            <div ng-message="maxlength">your name cannot be longer than 20 characters.</div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+<script src="angular.min.js"></script>
+<script src="angular-messages.min.js"></script>
+<script>
+angular.module('myApp',['ngMessages'])
+        .controller('signupController',function($scope){
+            $scope.signup = {
+                name:''
+            };
+        });
+</script>
+</body>
+</html>

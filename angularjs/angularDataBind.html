@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>angularjs 数据双向绑定</title>
+</head>
+<body>
+
+
+    <!--
+        我们把ez-namecard2和ez-namecard-editor都绑定到同一个sb对象上，那么在ez-namecard-editor上进行编辑，
+        将导致sb对象发生变化，由于ez-namecard2监听了这个变化，所以，ez-namecard2的显示也应该变化。
+    -->
+    <h2>数据双向绑定</h2>
+    <div ng-init="sb={name:'jessie',gender:'female', age: 23}">
+        <h4>从数据到页面的单向绑定</h4>
+        <div ez-namecard2 data="sb"></div>
+        <h4>从界面到数据的单向绑定</h4>
+        <div ez-namecard-editor data="sb"></div>
+    </div>
+    <!--
+        数据绑定包含两个方向：
+            数据的变化会自动更新界面
+            界面的交互会自动更新数据
+
+    -->
+
+    <script src="../js/jquery-1.11.2.js"></script>
+    <script src="angular.min.js"></script>
+    <script type="text/javascript">
+        var app = angular.module('myApp',[]);
+        app.directive('ezNamecard1', function($rootScope){
+            return {
+                restrict: 'A',
+                template: '<div></div>',
+                link: function(scope, element, attrs){
+                    var sb = $rootScope.$eval(attrs.data);
+                    var _html = '<div>name1: ' + sb.name + '</div>'
+                    + '<div>gender1: ' + sb.gender + '</div>'
+                    + '<div>age1: ' + sb.age + '</div>';
+                    element.append(_html);
+                }
+            }
+        });
+
+
+        //我们已经实现了将数据显示到界面上，不过这还不够。由于编译仅仅在启动引导时执行一次，
+        // 这意味着我们的link函数只会被调用一次，那么，如果数据变化了，在界面上将不会有任何
+        // 反馈，即界面和数据将变得不同步了。
+        //这就需要持续监听数据的变化。
+        //好在AngularJS的scope对象直接支持对数据变化的监听。
+
+        //$watch方法要求传入两个参数：
+        //要监听的表达式，比如：sb
+       // 变化时的回调函数，AngularJS将向这个函数传入新值和旧值
+
+        app.directive('ezNamecard2', function($rootScope){
+            return {
+                restrict: 'A',
+                replace: true, //用自定义元素取代指令声明，即将不再有<div ez-namecard2 data="sb"></div>
+                template: '<div class="red"></div>',
+                link: function(scope, element, attrs){
+                    element.append('<div>name2: <span class="name"></span></div>')
+                            .append('<div>gender2: <span class="gender"></span></div>')
+                            .append('<div>age2: <span class="age"></span></div>');
+                    scope.$watch(attrs.data, function(newValue, oldValue){ // 监听数据(attrs.data)的变化
+                        jQuery('.name').text(newValue.name);
+                        jQuery('.gender').text(newValue.gender);
+                        jQuery('.age').text(newValue.age);
+                    }, true);
+                }
+            };
+        });// 当数据被改变时，界面会自动得到更新。这时，我们称，建立了从数据到界面的单向绑定。
+
+
+        //如何修改数据？
+        app.directive('ezNamecardEditor', function($rootScope){
+            return {
+                restrict: 'A',
+                template: '<div></div>',
+                link: function(scope, element, attrs){
+                    var model = attrs.data;
+                    element.append('<div>name3: <input type="text" class="name" field="name"/></div>')
+                            .append('<div>gender3: <input type="text" class="gender" field="gender"/></div>')
+                            .append('<div>age3: <input type="text" class="age" field="age"/></div>');
+                    element.find('input').on('keyup', function(ev){
+                        var field = ev.target.getAttribute('field');
+                        console.log([field, model]);
+                        scope[model][field] = ev.target.value;
+                        scope.$apply(""); // !!! 为了捕捉对数据的修改，AngularJS要求开发者使用scope对象
+                        // 的$apply方法对数据进行修改，$apply方法对数据进行修改，$apply方法内部会自动地调
+                        // 用监听队列里的监听函数
+                    });
+                }
+            };
+        }); //最终的效果是，用户在界面上进行的操作，自动地同步到了我们的数据。
+        // 这时，我们称，已经建立了从界面到数据的单向绑定。
+
+    </script>
+</body>
+</html>

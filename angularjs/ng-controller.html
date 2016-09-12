@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ng-controller="parentController">
+{{someBareValue}}
+<button ng-click="someAction()">parent button</button>
+<div ng-controller="childController">
+    {{someBareValue}}
+    <button ng-click="childAction()">child button</button>
+</div>
+<!--
+由于原型继承的关系，修改父级对象中的someBareValue会同时修改子对象中的值
+此例子中的子控制器是复制而非引用someBareValue-->
+<script src="angular.min.js"></script>
+<script>
+    angular.module('myApp',[])
+            .controller('parentController', function($scope){
+                $scope.someBareValue = 'hello computer';
+                $scope.someAction = function(){
+                    $scope.someBareValue = 'hello human, from parent';
+                };
+            })
+            .controller('childController', function($scope){
+                $scope.childAction = function(){
+                    $scope.someBareValue = 'hello human, from child';
+                };
+            });
+</script>
+</body>
+</html>

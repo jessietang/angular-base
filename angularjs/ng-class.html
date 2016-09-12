@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .red {background-color: red;}
+        .blue {background-color: blue;}
+    </style>
+</head>
+<body>
+<div ng-controller="LotteryController">
+    <div ng-class="{red: x>5, blue: x<=5}" > <!--  ng-if="x > 5"  -->
+        You won!
+    </div>
+    <button ng-click="x = generateNumber()"
+            ng-init="x = 0">
+        Draw number
+    </button>
+</div>
+<script src="angular.min.js"></script>
+<script>
+angular.module('myApp',[])
+        .controller('LotteryController', function($scope){
+            $scope.generateNumber = function(){
+                return Math.floor((Math.random()*10)+1);
+            };
+        });
+</script>
+</body>
+</html>

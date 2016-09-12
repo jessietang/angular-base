@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>在指令中操作DOM</title>
+</head>
+<body ng-controller="myCtrl">
+    <input ng-model="format"/>
+    <div my-current-time="format"></div>
+    <!--
+    如果需要在指令中操作DOM，我们可以在选项中使用link，link需要指定一个函数，AngularJS将在
+    编译时调用 这个函数，并传递scope、element和attrs这几个参数进去。
+    scope是scope对象。
+    element是jQuery对象。
+    attrs是规范化后的属性名/值哈希表。
+
+    -->
+<script src="angular.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp',[])
+            .controller('myCtrl',['$scope', function($scope){
+                $scope.format = 'yyyy-MM-dd hh:mm:ss';
+            }])
+            .directive('myCurrentTime', ['$interval','dateFilter', function($interval, dateFilter){
+                return {
+                    restrict: 'A',
+                    link: function(scope, element, attrs){
+                        var format, timeoutId;
+                        function updateTime(){
+                            element.text(dateFilter(new Date(), format));
+                        }
+                        scope.$watch(attrs.myCurrentTime, function(newValue, oldValue){
+                            format = newValue;
+                            updateTime();
+                        });
+                        element.on('$destroy', function(){
+                            $interval.cancel(timeoutId);
+                        });
+                        timeoutId = $interval(function(){
+                            updateTime();
+                        }, 1000);
+                    }
+                };
+            }]);
+</script>
+</body>
+</html>

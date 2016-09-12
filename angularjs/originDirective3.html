@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ng-controller="myController">
+<input type="text" ng-model="someProperty"/><br/>
+<input type="text"
+        ng-readonly="someProperty"
+        value="some text here"/>
+<span>{{someProperty}}</span>
+
+<br/>
+
+<label for="">someProperty = {{someProperty2}}</label>
+<input type="checkbox"
+       ng-checked="someProperty2"
+        ng-init="someProperty2 = true"
+        ng-model="someProperty2"/>
+<span>{{someProperty2}}</span>
+
+<br/>
+
+<label for="">someProperty = {{someProperty3}}</label>
+<input type="checkbox"
+        ng-checked="someProperty3"
+        ng-init="someProperty3 = false"
+        ng-model="someProperty3"/>
+
+<br/>
+
+
+<label for="">select two fish:</label>
+<input type="checkbox" name="fish" ng-init="isTwoFish = true" ng-model="isTwoFish"/><br/>
+<select name="" id="">
+    <option value="">one fish</option>
+    <option value="" ng-selected="isTwoFish">two fish</option>
+</select>
+<p>{{isTwoFish}}</p>
+
+
+<script src="angular.min.js"></script>
+<script>
+    angular.module('myApp',[])
+            .controller('myController',function(){});
+</script>
+</body>
+</html>

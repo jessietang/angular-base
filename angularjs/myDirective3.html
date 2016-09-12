@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>创建一个文本输入域，并将输入值同指令内部隔离作用域的属性绑定起来</title>
+</head>
+<body>
+<input type="text" ng-model="myUrl"/>
+<div my-directive
+        some-attr="{{myUrl}}"
+        my-link-text="click me to go to baidu"></div>
+<script src="angular.min.js"></script>
+<script>
+angular.module('myApp',[])
+        .directive('myDirective', function(){
+            return {
+                restrict: 'A',
+                replace: true,
+                scope: {
+                    myUrl: '@someAttr',
+                    myLinkText: '@'
+                },
+                template: '<a href="{{myUrl}}">{{myLinkText}}</a>'
+            };
+        });
+</script>
+</body>
+</html>

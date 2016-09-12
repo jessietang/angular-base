@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>angularjs $http 服务</title>
+    <!--
+         $http的基本调用格式：
+        $http(config).success(function(data,status,headers,config){ })
+        .error(function(data,status,headers,config){ });
+    -->
+</head>
+<body ng-controller="myCtrl">
+    <div ng-repeat="stu in students">
+        <p>{{stu.name}}</p>
+        <p>{{stu.age}}</p>
+        <hr/>
+    </div>
+<script src="angular.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp',[])
+            .controller('myCtrl', ['$scope', '$http', function($scope, $http){
+                $scope.students = [];
+
+                $http.get('data.txt')
+                        .success(function(data, status, headers, config){
+                            $scope.students = data.students;
+                        })
+                        .error(function(data, status, headers, config){
+
+                        });
+                //或者写成
+                /*
+                $http({
+                    method: 'GET',
+                    url: 'data.txt'
+                }).success(function(data, status, headers, config){
+                    $scope.students = data.students;
+                }).error(function(data, status, headers, config){
+
+                });
+                */
+            }]);
+</script>
+</body>
+</html>

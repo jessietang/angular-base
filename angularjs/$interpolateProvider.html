@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div ng-controller="myController">
+        <input type="email" ng-model="to" placeholder="recipent"/><br/>
+        <textArea ng-model="emailBody" placeolder="email body"></textArea>
+        <pre>__previewText__</pre>
+    </div>
+    <script src="angular.min.js"></script>
+    <script>
+        //create a new module: emailParser
+        angular.module('emailParser',[])
+                .config(['$interpolateProvider', function($interpolateProvider){
+                    $interpolateProvider.startSymbol('__');
+                    $interpolateProvider.endSymbol('__');
+                }])
+                .factory('EmailParser',['$interpolate', function($interpolate){
+                    //处理解析的服务
+                    return {
+                        parse: function(text, context){
+                            var template = $interpolate(text);
+                            return template(context);
+                        }
+                    };
+                }]);
+        //将创建的模块注入到应用中，并在邮件正文的文本中运行这个邮件解析器
+        angular.module('myApp',['emailParser'])
+                .controller('myController', ['$scope', 'EmailParser',function($scope,EmailParser){
+                    $scope.$watch('emailBody', function(body){
+                        if(body){
+                            $scope.previewText = EmailParser.parse(body,{to:$scope.to});
+                        }
+                    });
+                }]);
+    </script>
+</body>
+</html>

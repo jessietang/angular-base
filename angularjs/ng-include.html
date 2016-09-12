@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<!--
+1.ng-include="'templates/myNgInclude.html'"
+2.ng-include="ngIncludeUrl"-->
+<div
+        ng-controller="myController"
+        ng-init="name='world'">
+    hello {{name}}
+    <div my-include></div>
+</div>
+
+<!--
+<div ng-include="views/user/show.html"></div> 错在哪里？
+
+如果你这么写过，会发现这个位置啥也没有加载出来，那么，错在哪里呢？错在ng-include需要的是一个变量，
+2.如果你在$scope中有这样一个变量 $scope.userShowTemplateUrl = "views/users/show.html"，并且把
+上面这句变为<div ng-include="userShowTemplateUrl"></div>就能正常工作了。或者这样写也行：
+1.<div ng-include=" 'views/user/show.html' "></div>
+
+原因何在？
+
+因为在ng-include中，是把它的参数当做变量来解释的，它会通过$eval对传入的值进行计算，然后作为模板
+地址去加载。
+
+3.不过，更好的方法是把这些界面片段（partical）写成指令，那样你就不用在多处重复写路径了，更重要的是，
+将来你可以直接在这里扩展它的交互逻辑，从界面原型平滑的演化到线上系统。
+-->
+<script src="angular.min.js"></script>
+<script>
+    angular.module('myApp',[])
+            .controller('myController', function($scope){
+                $scope.name = '';
+                /*$scope.ngIncludeUrl = 'templates/myNgInclude.html';*/
+            }).directive('myInclude',function(){
+                return {
+                    restrict: 'A',
+                    replace: true,
+                    template: '<div style="width:200px;height: 30px;background-color: red;">我是被ng-include进来滴</div>'
+                };
+            });
+</script>
+</body>
+</html>

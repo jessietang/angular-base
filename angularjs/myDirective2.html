@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>向指令中传递数据</title>
+    <style>
+        .font-red {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div my-directive
+     some-attr="http://www.cuit.edu.cn"
+     my-link-text="click me to go to cuit"></div>
+
+<div class="font-red" my-directive1
+        my-url="http://www.baidu.com"
+        my-link-text="百度"></div>
+<script src="angular.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp', [])
+            .directive('myDirective',function(){
+                return {
+                    restrict: 'A',
+                    replace: true,
+                    scope: {
+                        myUrl: '@someAttr',
+                        myLinkText: '@'
+                    },
+                    template: '<a href="{{myUrl}}">{{myLinkText}}</a>'
+                };
+            })
+            .directive('myDirective1', function(){
+                return {
+                    restrict: 'A',
+                    replace: false,
+                    scope: {
+                        myUrl:'@',
+                        myLinkText:'@'
+                    },
+                    template: '<a href="{{myUrl}}">{{myLinkText}}</a>'
+                };
+            });
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../js/jquery-1.11.2.js"></script>
+    <style>
+        .div1{
+            width: 200px;
+            color: red;
+            border: 1px solid green;
+        }
+        .div1{
+            width: auto;
+            color: inherit;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="div1">11111111111</div>
+<input type="email" id="placeholder_text" value="aaa" />
+<script>
+    $(function(){
+        $('#placeholder_text').focus(function(){
+            if($(this).val() == 'aaa'){
+                $(this).val('');
+            }
+        }).blur(function(){
+            if($(this).val() == ''){
+                $(this).val('aaa');
+            }
+        });
+    });
+</script>
+</body>
+</html>
