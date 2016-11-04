@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../smallExample/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="angularQa.css"/>
+</head>
+<body>
+<div class="qa-app" ng-controller="qaController">
+    <div class="qa-title text-center">
+        <div class="container">
+            <h1>问答</h1>
+            <button class="add-question btn btn-primary pull-right" ng-click="qaFormToggle()">add question</button>
+        </div>
+    </div>
+
+    <div class="qa-content">
+        <div class="container">
+            <form action="" name="qa_form" class="question-box clearfix" ng-show="common.showQaForm"
+                  ng-submit="submitForm($event);">
+                <div class="form-group">
+                    <label class="pull-left">question</label>
+                    <input type="text" name="qa_title" ng-model="field.title" ng-minlength="3"
+                           ng-maxlength="20" class="form-control" placeholder="title of question" required ngFocus/>
+                    <div class="has-error"
+                         ng-show="qa_form.qa_title.$dirty && qa_form.qa_title.$invalid &&
+                                !qa_form.qa_title.$focused">
+                        <small class="has-error"
+                               ng-show="qa_form.qa_title.$error.required">
+                            your question title is required!
+                        </small>
+                        <small class="has-error"
+                               ng-show="qa_form.qa_title.$error.minlength">
+                            Your name is required to be at least 3 characters.
+                        </small>
+                        <small class="has-error"
+                               ng-show="qa_form.qa_title.$error.maxlength">
+                            Your name cannot be longer than 20 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea name="qa_content" ng-minlength="25" ng-model="field.content" id="" cols="30" rows="3" placeholder="content of question" class="form-control"></textarea>
+                    <div class="has-error"
+                         ng-show="qa_form.qa_content.$dirty && qa_form.qa_content.$invalid &&
+                                !qa_form.qa_content.$focused">
+                        <small class="has-error"
+                               ng-show="qa_form.qa_content.$error.required">
+                            your question title is required!
+                        </small>
+                        <small class="has-error"
+                               ng-show="qa_form.qa_content.$error.minlength">
+                            Your name is required to be at least 25 characters.
+                        </small>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success pull-right">save</button>
+                <a class="btn btn-default pull-right cancel-btn" ng-click="qaFormToggle()">cancel</a>
+
+
+
+            </form>
+
+            <div class="media" ng-repeat="question in questions">
+                <div class="media-left">
+                    <button class="btn btn-default" qst-id={{question.id}} ng-click="voteUp($event);">
+                        <span class="glyphicon glyphicon-chevron-up" qst-id={{question.id}}></span>
+                        <span class="vote-count">{{question.voteCount}}</span>
+                    </button>
+                    <button class="btn btn-default" qst-id={{question.id}} ng-click="voteDown($event);">
+                        <span class="glyphicon glyphicon-chevron-down" qst-id={{question.id}}></span>
+                    </button>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">{{question.title}}</h4>
+                    <p>{{question.content}}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="../angular.min.js"></script>
+<script src="../angular-messages.min.js"></script>
+<script type="text/javascript" src="angularQa.js"></script>
+</body>
+</html>

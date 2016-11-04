@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <!--
+主要功能：
+
+1. 点击购买的时候 进行数量的增加或者条目的增加，同时总价格变化；
+
+2. 进行删除的时候，删除当前条目，总价变化；
+
+3. 进行数目增加减少的时候，总价格变化；
+    -->
+    <link rel="stylesheet" href="../smallExample/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="shoppingCart.css"/>
+</head>
+<body>
+    <div class="container">
+            <div class="row myShoppingCart" ng-controller="showItem">
+                <div class="leftPdp col-md-6">
+                    <div class="col-md-4" ng-repeat="item in proItems">
+                        <h3 class="pro-title">{{item.name}}</h3>
+                        <h3 class="pro-price">{{item.price}}</h3>
+                        <button class="btn btn-default" item-id={{item.id}}
+                                item-name={{item.name}} item-price={{item.price}}
+                                ng-click="buyAction($event)">add to cart</button>
+                    </div>
+                </div>
+
+                <div class="rightCart col-md-6">
+                    <div class="row cartTitle">
+                        <div class="col-md-4">product name</div>
+                        <div class="col-md-2">price</div>
+                        <div class="col-md-4">number</div>
+                        <div class="col-md-2">operate</div>
+                    </div>
+                    <div class="row cartItem" ng-repeat="buyItem in boughtList">
+                        <div class="col-md-4 pro-cart-name">{{buyItem.name}}</div>
+                        <div class="col-md-2 pro-cart-price">{{buyItem.price}}</div>
+                        <div class="col-md-4 pro-cart-num" buy-id={{buyItem.id}}>
+                            <button class="btn-default btn-sm glyphicon glyphicon-minus" buy-id={{buyItem.id}}
+                                    ng-click="substractItem($event,buyItem.num)"></button>
+                            <input type="text" ng-model="buyItem.num" buy-id={{buyItem.id}} ng-change="changeItem($event,buyItem.num)"/>
+                            <button class="btn btn-default btn-sm glyphicon glyphicon-plus" buy-id={{buyItem.id}}
+                                    ng-click="addItem($event,buyItem.num)"></button>
+                        </div>
+                        <div class="col-md-2 pro-cart-delete">
+                            <a class="btn btn-danger" buy-id={{buyItem.id}} ng-click="removeItem($event)">delete</a>
+                        </div>
+                    </div>
+                    <div class="total text-right">合计：<span>{{total}}</span>元</div>
+                    <button class="btn btn-primary" ng-click="submit()">结算</button>
+                </div>
+            </div>
+    </div>
+    <script src="../angular.min.js"></script>
+    <script type="text/javascript" src="shoppingCart.js"></script>
+</body>
+</html>

@@ -75,7 +75,7 @@ app.controller("showItem", function($scope){
     $scope.removeItem = function($event){
         var target = $event.target;
         var id = target.getAttribute("item-id");
-        var thisNode = document.getElementById("shopping-cart-list");
+        var thisNode = document.getElementById("shopping-cart-list"); //这里应该有问题，看看？？？
         target.parentNode.parentNode.parentNode.removeChild(thisNode);
         if(boughtList[id]){
             delete boughtList[id];
