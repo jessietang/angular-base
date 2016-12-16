@@ -6,7 +6,7 @@
 </head>
 <body>
 <div ng-app="myApp">
-    <my-directive></my-directive>  <!--这里不能用myDirective-->
+    <my-directive2></my-directive2>  <!--这里不能用myDirective-->
     <div my-directive></div>
     <hello></hello>
 </div>
@@ -20,7 +20,7 @@
                         template:'<a href="http://www.cuit.edu.cn">click me to go to cuit</a>'
                     };
                 })
-                .directive('myDirective',function(){  //指令名应该是驼峰命名风格myDirective，不能用my-directive
+                .directive('myDirective2',function(){  //指令名应该是驼峰命名风格myDirective，不能用my-directive
                     return {
                         restrict:'A',//元素(E)、属性(A)、类(C)、注释(M)
                         replace: true, //用自定义元素取代指令声明，即查看源代码不再有<my-directive>标签
@@ -33,7 +33,7 @@
                         replace:true,  /*true代表替换:<div></div>     false代表不替换：<hello><div>hhhhh</div></hello>*/
                         template:'<div>hello angularjs</div>'
                     };
-                });;
+                });
     </script>
 </body>
 </html>

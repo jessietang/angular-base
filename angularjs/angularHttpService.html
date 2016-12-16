@@ -15,19 +15,41 @@
         <p>{{stu.age}}</p>
         <hr/>
     </div>
+
+    <p>{{myText1}}</p>
+    <p>{{theTime}}</p>
 <script src="angular.min.js"></script>
 <script type="text/javascript">
     angular.module('myApp',[])
-            .controller('myCtrl', ['$scope', '$http', function($scope, $http){
+            .controller('myCtrl', ['$scope', '$http','$timeout','$interval', function($scope, $http, $timeout, $interval){
                 $scope.students = [];
 
-                $http.get('data.txt')
+                /*$http.get('data.txt')
                         .success(function(data, status, headers, config){
                             $scope.students = data.students;
                         })
                         .error(function(data, status, headers, config){
 
+                        });*/
+
+                //angular1.5版本之后，上面的写法换成了下面这种写法，注意，是response.data这样取数据，
+                // 并且不再有上面提到的success()方法.
+                $http.get('data.txt')
+                        .then(function(response){
+                            $scope.students = response.data.students;
                         });
+
+                // AngularJS $timeout 服务对应了 JS window.setTimeout 函数。
+                $timeout(function(){
+                    $scope.myText1 = 'it is a test';
+                },2000);
+
+                //AngularJS $interval 服务对应了 JS window.setInterval 函数
+                $interval(function(){
+                    $scope.theTime = new Date().toLocaleTimeString();
+                },1000);
+
+
                 //或者写成
                 /*
                 $http({
