@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<!--值复制：这里字符串是值复制-->
+<!--click the parent button, parent value and child value will all change -->
+<!--click the child button, only the child value will change, parent value will not change-->
+    <div ng-controller="parentController">
+        <p>parent value: {{valueText}}</p>
+        <button ng-click="parentAction()">communicate to child</button>
+        <div ng-controller="childController">
+            <p>child value: {{valueText}}</p>
+            <button ng-click="childAction()">communicate to parent</button>
+        </div>
+    </div>
+
+
+
+<!--引用复制：这里是将某个模型对象的某个属性设置为字符串-->
+<!--whatever button you click, the valText will change at the same time.-->
+    <div ng-controller="controller1">
+        <p>parent: {{someModel.valText}}</p>
+        <button ng-click="action1()">parent</button>
+        <div ng-controller="controller2">
+            <p>child: {{someModel.valText}}</p>
+            <button ng-click="action2()">child</button>
+        </div>
+    </div>
+
+    <script src="../js/lib/angular.min.js"></script>
+    <script type="text/javascript">
+        angular.module('myApp',[])
+                .controller('parentController',['$scope', function($scope){
+                    $scope.valueText = 'hello computer';
+                    $scope.parentAction = function(){
+                        $scope.valueText = 'hello human, from parent.';
+                    };
+                }])
+                .controller('childController', ['$scope', function($scope){
+                    $scope.childAction = function(){
+                        $scope.valueText = 'hello human, from child.';
+                    };
+                }])
+                .controller('controller1',['$scope', function($scope){
+                    $scope.someModel = {
+                        valText: 'hello'
+                    };
+                    $scope.action1 = function(){
+                        $scope.someModel.valText = 'hello human, from parent.';
+                    };
+                }])
+                .controller('controller2',['$scope', function($scope){
+                    $scope.action2 = function(){
+                        $scope.someModel.valText = 'hello human, from child.';
+                    };
+                }]);
+    </script>
+</body>
+</html>

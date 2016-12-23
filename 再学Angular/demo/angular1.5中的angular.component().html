@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>angular1.5最大的一个变化就是引入了组件的概念，
+        并新增了 angular.component() 方法.
+        没有什么事是 Component 能做而 Directive 不能够做的</title>
+</head>
+<body>
+<my-component first-name="'jessie'" last-name="'tang'"></my-component>
+<!--这里注意，first-name和last-name写法，
+同时，first-name and last-name是变量，跟ng-include写法类似-->
+<script src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+
+    //创建myComponent组件
+    angular.module('myApp',[]).
+            component('myComponent',{
+                template: '<h1>hello {{$ctrl.getFullName()}}</h1>',
+                //不需要 controllerAs 语法就可以在模板中直接使用默认的 $ctrl 别名
+                bindings: {
+                    firstName: '<',
+                    lastName: '<'
+                },
+                controller: function(){
+                    this.getFullName = function(){
+                        return this.firstName +' ' + this.lastName;
+                    };
+                }
+            });
+
+
+    //用1.5以前的directive来做
+    /*angular.module('myApp',[]).
+            directive('myComponent',function(){
+                return {//different 0
+                    restrict: 'E',
+                    template: '<h1>hello {{ctrl.getFullName()}}</h1>',//different 1
+                    // 使用ctrl别名
+                    scope: {},
+                    bindToController: { //different 2
+                        firstName: '<',
+                        lastName: '<'
+                    },
+                    controller: function(){
+                        this.getFullName = function(){
+                            return this.firstName +' '+ this.lastName;
+                        };
+                    },
+                    controllerAs: 'ctrl' //different 3
+                };
+            });*/
+</script>
+</body>
+</html>

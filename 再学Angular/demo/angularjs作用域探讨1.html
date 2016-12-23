@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>作用域继承实例-原始类型数据继承</title>
+</head>
+    <body ng-app="app">
+    <div ng-controller="parentCtrl">
+        <input ng-model="args">
+        <div ng-controller="childCtrl">
+            <input ng-model="args">
+        </div>
+    </div>
+    <script type="text/javascript" src="../js/lib/angular.min.js"></script>
+    <script type="text/javascript">
+        angular.module('app', [])
+                .controller('parentCtrl', ['$scope', function($scope) {
+                    $scope.args = 'Nick DeveloperWorks';
+                }])
+                .controller('childCtrl', ['$scope', function($scope) {
+                }]);
+        /*第一个输入框：
+         　　虽然在 childCtrl 中没有定义具体的 args 属性，但是因为 childCtrl 的作用域继承
+         自 parentCtrl 的作用域，因此，AngularJS 会找到父作用域中的 args 属性并设置到输入
+         框中。而且，如果我们在第一个输入框中改变内容，内容将会同步的反应到第二个输入框。
+
+         第二个输入框：
+         　　第二个输入框的内容从此将不再和第一个输入框的内容保持同步。在改变第二个输入框的
+         内容时，因为 HTML 代码中 model 明确绑定在 childCtrl 的作用域中，因此【【 AngularJS
+         会为 childCtrl 生成一个 args 原始类型属性】】。这样，根据 AngularJS 作用域继承原型
+         机制，childCtrl 在自己的作用域找得到 args 这个属性，从而也不再会去寻找 parentCtrl
+         的 args 属性。从此，两个输入框的内容所绑定的属性已经是两份不同的实例，因此不会再保
+         持同步。*/
+    </script>
+    </body>
+</html>

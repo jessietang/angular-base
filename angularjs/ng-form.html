@@ -22,29 +22,30 @@
         <input type="text"
                 name="dynamic_input"
                 ng-required="field.isRequired"
+               ng-minlength="3"
+               ng-maxlength="20"
                 ng-model="field.name"
                 placeholder="{{field.placeholder}}"/>
+        <div class="has-error" ng-messages="signup_form_input.dynamic_input.$error">
+            <div ng-messages-multiple ng-messages-include="templates/errors.html"></div>
+        </div>
     </div>
-    <div ng-show="signup_form_input.dynamic_input.$dirty &&
-    signup_form_input.dynamic_input.$invalid">
-        <!--注意：signup_form_input-->
-        <span class="has-error"
-                ng-show="signup_form_input.dynamic_input.$error.required">
-            The field is required.
-        </span>
-    </div>
+
+
+
     <button type="submit"
             ng-disabled="signup_form.$invalid">submit all</button>
 </form>
 
 <script src="angular.min.js"></script>
+<script src="angular-messages.min.js"></script>
 <script>
-    angular.module('myApp',[])
+    angular.module('myApp',['ngMessages'])
             .controller('formController', function($scope){
                 $scope.fields = [
-                    {name:'',placeholder:'username', isRequired: true},
-                    {name:'',placeholder:'password', isRequired:true},
-                    {name:'',placeholder:'email(optional)', isRequired:false}
+                    {placeholder:'username', isRequired: true},
+                    {placeholder:'password', isRequired:true},
+                    {placeholder:'email(optional)', isRequired:false}
                 ];
                 $scope.submitForm = function(){
                     alert('it works!');

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div ng-controller="myController">
+    <button ng-click="toggleDiv()">toggle it</button>
+    <div class="divBox" ng-if="flag" style="border: 1px solid #eee;">test it</div>
+</div>
+
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript" src="../js/lib/jquery.min.js"></script>
+<script type="text/javascript">
+    //加入jquery代码
+    jQuery.noConflict();
+    (function($){
+        $(function(){
+            $(document).on('click','.divBox',function(){
+                $(this).css("backgroundColor","red");
+            });
+        });
+    })(jQuery);//加入jquery代码
+
+
+    angular.module('myApp',[])
+            .controller('myController',['$scope', function($scope){
+                $scope.flag = true;
+                $scope.toggleDiv = function(){
+                    $scope.flag = !$scope.flag;
+                };
+            }]);
+
+
+</script>
+</body>
+</html>

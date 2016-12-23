@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>指令定义中scope参数设置为true时，会从父作用域继承并创建一个新的作用域对象</title>
+</head>
+<body>
+<div ng-init="property1 = 'some data'">
+    <div ng-init="property2 = 'more data'">
+        inside div two: {{property3}}
+        <div ng-init="property3='data for 3rd property'" ng-controller="controller1">
+            inside div three:{{property3}}
+            <div ng-init="property4">
+                inside div four:{{property3}}
+
+                <br/>
+                outside myDirective: {{myProperty}}
+                <div my-directive ng-init="myProperty='wow, this is cool, scope: true'">
+                    inside myDirective: {{myProperty}}
+                </div>
+
+                <br/>
+                outside myDirective2: {{myProperty2}}
+                <div my-directive2 ng-init="myProperty2='wow, this is cool, scope: false'">
+                    inside myDirective2: {{myProperty2}}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp',[])
+            .controller('controller1',['$scope', function($scope){
+
+            }])
+            .directive('myDirective',function(){
+                return {
+                    restrict: 'A',
+                    scope: true
+                };
+            })
+            .directive('myDirective2',function(){
+                return {
+                    restrict: 'A',
+                    scope: false
+                };
+            });
+</script>
+</body>
+</html>

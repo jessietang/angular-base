@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>作用域继承实例-对象数据继承</title>
+</head>
+
+<body ng-app="app">
+    <div ng-controller="parentCtrl">
+        <input ng-model="args.content">
+        <div ng-controller="childCtrl">
+            <input ng-model="args.content">
+        </div>
+    </div>
+    <script type="text/javascript" src="../js/lib/angular.min.js"></script>
+    <script type="text/javascript">
+        angular.module('app', [])
+                .controller('parentCtrl', ['$scope', function($scope) {
+                    $scope.args = {};
+                    $scope.args.content = 'Nick DeveloperWorks';
+                }])
+                .controller('childCtrl', ['$scope', function($scope) {
+                }]);
+        /*测试结果是无论改变任何一个输入框的内容，两者的内容始终同步。
+
+         　　根据 AngularJS 的原型继承机制，【【如果 ng-model 绑定的是一个对象数据，
+         那么 AngularJS 将不会为 childCtrl 创建一个 args 的对象】】，自然也不会有
+         args.content 属性。这样，childCtrl 作用域中将始终不会存在 args.content
+         属性，只能从父作用域中寻找，也即是两个输入框的的变化其实只是在改变 parentCtrl
+         作用域中的 args.content 属性。因此，两者的内容始终保持同步。*/
+    </script>
+</body>
+</html>

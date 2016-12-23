@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>独立作用域的作用</title>
+</head>
+<body>
+<div ng-controller="MainController">
+    <hello-world></hello-world>
+    <hello-world></hello-world>
+    <hello-world></hello-world>
+</div>
+
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+    var myAppModule = angular.module("myApp",[]);
+
+    myAppModule.controller('MainController', function($scope){
+
+            })
+            .directive("helloWorld",function(){
+                return {
+                    restrict:'AE',
+                    template:'<div><input type="text" ng-model="username"/>{{username}}</div><br>'
+                };
+            });
+
+    /*当我们自己创建某个指令时，这个指令肯定不可能只使用一次，是要重复多次使用的，
+    有的在一个页面内或者一个控制器内需要使用多次。
+    类似上面的这种场景，在任何一个输入框内改变数据，都会导致其他的标签内的数据一
+    同发生改变，这显然不是我们想要的。
+    这个时候就需要独立作用域了。*/
+
+</script>
+</body>
+</html>

@@ -21,12 +21,17 @@
                                 ng-minlength="3"
                                 ng-maxlength="20" required/>
                         <div class="has-error"
-                             ng-messages="signup_form.name.$error"
-                              ng-messages-multiple >
-                            <div ng-message="required">make sure you enter your name.</div>
+                             ng-messages="signup_form.name.$error">
+                            <!--<div ng-message="required">make sure you enter your name.</div>
                             <div ng-message="minlength">your name must be at least 3 characters.</div>
-                            <div ng-message="maxlength">your name cannot be longer than 20 characters.</div>
-                        </div>
+                            <div ng-message="maxlength">your name cannot be longer than 20 characters.</div>-->
+                            <div ng-messages-multiple ng-messages-include="templates/errors.html"></div>
+                        </div><!--这样写就对了，给他单独拿个div来装-->
+
+                        <!--<div class="has-error" ng-messages="signup_form.name.$error"
+                             ng-messages-multiple ng-messages-include="templates/errors.html"></div>-->
+                        <!--之前就是这样写，所以一直不对-->
+
                     </fieldset>
                 </form>
             </div>

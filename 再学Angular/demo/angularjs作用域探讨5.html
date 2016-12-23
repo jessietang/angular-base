@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>如何实现独立作用域</title>
+</head>
+<body>
+<div ng-controller="MainController">
+    <hello-world></hello-world>
+    <hello-world></hello-world>
+    <hello-world></hello-world>
+</div>
+
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+    var myAppModule = angular.module("myApp",[]);
+
+    myAppModule.controller('MainController', function($scope){
+
+    })
+            .directive("helloWorld",function(){
+                return {
+                    restrict:'AE',
+                    scope: {}, // scope: true
+                    template:'<div><input type="text" ng-model="username"/>{{username}}</div><br>'
+                };
+            });
+
+    /*　只需要在定义指令时，添加scope：{}这个属性，就可以使标签拥有自己的作用域。
+
+     　　仅仅是添加这一行代码而已，就实现了独立作用域。
+
+     　　在进行输入时，每个模板内使用自己的数据，不会相互干扰。*/
+
+</script>
+</body>
+</html>

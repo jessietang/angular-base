@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div>
+    <!--ng-submit这个指令会阻止默认行为（发送请求并重新加载页面），前提是表单不含有action属性-->
+    <form  name="signup_form"
+          ng-controller="formController"
+            ng-submit="submitForm()" novalidate>
+        <div ng-repeat="field in fields" ng-form="signup_form_input">
+            <input type="text" name="dynamic_input"
+                   ng-required="field.isRequired"
+                    placeholder="{{field.placeholder}}"
+                    ng-model="field.name"
+                    ng-minlength="3"
+                    ng-maxlength="20"/>
+            <!--<div ng-show="signup_form_input.dynamic_input.$dirty &&
+            signup_form_input.dynamic_input.$invalid">
+                <span style="color: red;" ng-show="signup_form_input.dynamic_input.$error.required">this field is required.</span>
+            </div>-->
+            <div class="error"  ng-messages="signup_form_input.dynamic_input.$error" >
+                <div ng-messages-multiple ng-messages-include="templates/errors.html"></div>
+            </div>
+        </div>
+        <button type="submit" >submit all</button>
+    </form>
+</div>
+
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript" src="../js/lib/angular-messages.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp',['ngMessages'])
+            .controller('formController',['$scope',function($scope){
+                $scope.fields = [
+                    {placeholder:'username',isRequired:true},
+                    {placeholder:'password',isRequired:true},
+                    {placeholder:'Email(optional)',isRequired:false}
+                ];
+                $scope.submitForm = function(){
+                    alert('it works');
+                };
+
+            }]);
+
+</script>
+</body>
+</html>

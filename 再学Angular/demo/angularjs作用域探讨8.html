@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>基于变量的绑定=</title>
+</head>
+<body>
+
+<div ng-controller="myAppCtrl">
+    ctrl:<input type="text" ng-model="testname"><br>
+    directive:<hello-world name="testname"></hello-world>
+</div>
+
+
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+    var myAppModule = angular.module("myApp",[]);
+
+    myAppModule.controller("myAppCtrl",['$scope',function($scope){
+        $scope.testname="my name is jessie";
+    }]);
+
+    myAppModule.directive("helloWorld",function(){
+        return {
+            restrict:'AE',
+            scope:{
+                name:'=' /*基于变量的绑定=*/
+            },
+            template:'<input type="text" ng-model="name">',
+            replace:true
+        }
+    })
+    /*
+     　在上面的代码中，可以看到
+
+     　　1 在控制器myAppCtrl对应的div中，定义了一个变量ng-model —— testname。
+
+     　　2 testname对应的是输入框中输入的值。
+
+     　　3 然后把这个变量当做一个参数传递给 hello-world 这个标签的name属性。
+
+     　　4 在 hello-world 标签中，又把这个name绑定到模板中的一个输入框内。
+
+     　　最终两个输入框的内容被连接起来，无论改变哪一个输入框内的值，testname与name都会发生改变。
+
+        在指令中通过scope指定 name 绑定规则是变量的绑定方式。
+     　 最终通过 hello-world 标签内的属性依赖关系把 testname与name连接在一起：
+    */
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div ng-controller="myController" ng-init="name='cassie'">
+        hello {{name}}
+        <div ng-include="'templates/temple1.html'"></div>
+        <hr/>
+        <div ng-include="templateUrl"></div>
+        <hr/>
+        <div my-include></div>
+
+        <!--<div ng-include="templates/temple1.html"></div>--><!--错误的写法-->
+        <!--在ng-include中是吧他的参数当做变量来解释的，所以，这样写啥也加载不出来的-->
+        <!--改进办法：
+            1. <div ng-include="'templates/temple1.html'"></div>
+            2. 在$scope中定义一个变量：
+            $scope.templateUrl = 'templates/temple1.html';
+            3.把界面片段写成指令，这是我们强烈建议的方法
+            template里面的内容要有最外层元素包起来
+            刚开始这样写， 报错了：
+            template: '<div>11111111111</div><div>11111111111</div><div>11111111111</div>'
+            然后我在最外层加了个div就可以了：
+            template: '<div><div>11111111111</div><div>11111111111</div><div>11111111111</div></div>'
+        -->
+    </div>
+    <script type="text/javascript" src="../js/lib/angular.min.js"></script>
+    <script type="text/javascript">
+        angular.module('myApp',[])
+                .controller('myController',['$scope', function($scope){
+                    $scope.templateUrl = 'templates/temple1.html';
+                }])
+                .directive('myInclude',function(){
+                    return {
+                        restrict: 'A',
+                        replace: true,
+                        template: '<div><div>11111111111</div><div>11111111111</div><div>11111111111</div></div>'
+                    };
+                });
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>基于字符串的绑定@</title>
+</head>
+<body>
+<div ng-controller="MainController">
+    <hello-world say="test string"></hello-world>
+    <hello-world say="{{str2}}"></hello-world>
+    <hello-world say="test()"></hello-world>
+</div>
+
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+    var myAppModule = angular.module("myApp",[]);
+
+    myAppModule
+            .controller('MainController', function($scope){
+                $scope.str1 = "hello";
+                $scope.str2 = "world";
+                $scope.str3 = "angular";
+            })
+            .directive("helloWorld",function(){
+                return {
+                    scope:{
+                        say:'@' /*基于字符串的绑定@*/
+                    },
+                    restrict:'AE',
+                    template:"<div>{{say}}</div>",
+                    replace:true
+                };
+            });
+
+    /*页面显示结果：
+
+     test string
+     world
+     test()
+
+     看一下代码，在body中使用了三次自定义的标签，每种标签的内部有一个say的属性，
+     这个属性绑定了一个双引号的字符串。
+
+     在指令的定义中，添加了scope:{say:'@'}这个键值对属性，也就是说，angular会识
+     别say所绑定的东西是一个【字符串】。
+
+     在模板中，使用表达式{{say}}输出say所表示的内容。
+
+     可以看到，双引号内的内容都被当做了字符串。当然{{str2}}表达式会被解析成对应的内容，
+     再当做字符串。
+
+     */
+</script>
+</body>
+</html>

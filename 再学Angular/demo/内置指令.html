@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<p>1.ng-disabled</p>
+<input type="text" ng-model="username"/>
+<button type="button" ng-disabled="!username">submit</button>
+
+<p>2.ng-readonly</p>
+<input type="text" ng-model="someText"/>
+<input type="text" ng-readonly="someText" value="some text"/>
+
+<p>3.ng-checked</p>
+<label for="">someProperty = {{someProperty}}</label>
+<input type="checkbox"
+       ng-init="someProperty = true"
+        ng-model="someProperty"
+        ng-checked="someProperty"/>
+
+<p>ng-href and ng-src都能有效的帮助重构和避免错误</p>
+<p>4.ng-href 当使用当前作用域中的属性动态创建url时，应该用ng-href代替href</p>
+<p>当href包含一个{{expression}}时总是使用ng-href</p>
+<a ng-href="{{myHref}}">hehehe</a>
+
+<p>5.ng-src</p>
+<p>angularjs会告诉浏览器在ng-src对应的表达式生效之前不要加载图像</p>
+<h1>wrong way</h1>
+<img src="{{imgSrc}}" alt=""/>
+
+<h1>right way</h1>
+<img ng-src="{{imgSrc}}" alt=""/>
+
+
+<script src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp',[])
+            .run(function($rootScope, $timeout){/*js代码中通过run方法来访问$rootScope*/
+                $timeout(function(){
+                    $rootScope.imgSrc = 'https://www.google.com/images/srpr/logo11w.png';
+                },2000);
+            });
+</script>
+</body>
+</html>

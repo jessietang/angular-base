@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>基于方法的绑定&</title>
+</head>
+<body>
+<div ng-controller="myAppCtrl">
+    <hello-world say="sayHello(name)"></hello-world>
+    <hello-world say="sayNo(name)"></hello-world>
+    <hello-world say="sayYes(name)"></hello-world>
+</div>
+
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+    var myAppModule = angular.module("myApp",[]);
+
+    myAppModule.controller("myAppCtrl",['$scope',function($scope){
+        $scope.sayHello = function(name){
+            console.log("hello !"+ name);
+        };
+        $scope.sayNo = function(name){
+            console.log("no !"+ name);
+        };
+        $scope.sayYes = function(name){
+            console.log("yes !"+ name);
+        };
+    }]);
+
+    myAppModule.directive("helloWorld",function(){
+        return {
+            restrict:'AE',
+            scope:{
+                say:'&' /*基于方法的绑定&*/
+            },
+            template:'<div><input type="text" ng-model="username"/><br><button ng-click="say({name:username})">click</button><br></div>',
+            replace:true
+        }
+    });
+
+    /*
+    执行结果：
+     hello !aini
+     no !jessie
+     yes !cassie
+     */
+
+    /*这段代码中scope中的绑定规则变成了&，也就是方法绑定。
+
+     　　在body中，通过自定义标签传入了三个方法，分别是sayHello(name),sayNo(name),sayYes(name)，
+        这三个方法都需要一个name变量。
+
+     　　在指令的定义中，模板替换成一个输入框，一个按钮：
+
+     　　输入框：用于输入username，也就是三个方法需要的参数name。
+
+     　　按钮：点击触发函数——通过绑定规则，绑定到相应的方法。
+
+         也就是说
+
+     　　通过say在scope中的定义，angular知道了say对应的是个【方法】；
+
+     　　通过{name:username}的关联，知道了传入的是username。
+
+     　　从而交给对应的方法执行。*/
+</script>
+</body>
+</html>

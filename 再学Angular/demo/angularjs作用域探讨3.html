@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>作用域继承实例-不再访问父作用域的数据对象</title>
+</head>
+
+<body ng-app="app">
+    <div ng-controller="parentCtrl">
+        <input ng-model="args.content">
+        <div ng-controller="childCtrl">
+            <input ng-model="args.content">
+        </div>
+    </div>
+    <script type="text/javascript" src="../js/lib/angular.min.js"></script>
+    <script type="text/javascript">
+        angular.module('app', [])
+                .controller('parentCtrl', ['$scope', function($scope) {
+                    $scope.args = {};
+                    $scope.args.content = 'Nick DeveloperWorks';
+                }])
+                .controller('childCtrl', ['$scope', function($scope) {
+                    $scope.args = {};
+                    $scope.args.content = 'Nick DeveloperWorks for test';
+                }]);
+        /*测试结果是【两个输入框的内容永远不会同步】。子作用域有实例数据对象，则不访问父作用域。*/
+    </script>
+</body>
+</html>

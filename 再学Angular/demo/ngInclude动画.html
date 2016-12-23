@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        /*1. css3过渡*/
+        /*.animateInclude.ng-enter,
+        .animateInclude.ng-leave {
+            -webkit-transition: 2s linear all;
+            -moz-transition: 2s linear all;
+            -ms-transition: 2s linear all;
+            -o-transition: 2s linear all;
+            transition: 2s linear all;
+        }
+
+        .animateInclude.ng-enter {
+            opacity: 0;
+            color: red;
+        }
+
+        .animateInclude.ng-enter.ng-enter-active {
+            opacity: 1;
+            color: black;
+        }
+
+        .animateInclude.ng-leave {}
+        .animateInclude.ng-leave.ng-leave-active {
+            opacity: 0;
+        }*/
+
+        /*2.css3动画*/
+        /*@keyframes animateInclude-enter {
+            from {opacity: 0;color: red;}
+            to {opacity: 1; color: black;}
+        }
+
+        @-webkit-keyframes animateInclude-enter {
+            from {opacity: 0;color: red;}
+            to {opacity: 1; color: black;}
+        }
+
+        @keyframes animateInclude-leave {
+            from {opacity: 1;}
+            to {opacity: 0; color: black;}
+        }
+
+        @-webkit-keyframes animateInclude-leave {
+            from {opacity: 1;}
+            to {opacity: 0; color: black;}
+        }
+
+        .animateInclude.ng-enter {
+            -webkit-animation: 2s animateInclude-enter;
+            -o-animation: 2s animateInclude-enter;
+            animation: 2s animateInclude-enter;
+        }
+
+        .animateInclude.ng-leave {
+            -webkit-animation: 2s animateInclude-leave;
+            -o-animation: 2s animateInclude-leave;
+            animation: 2s animateInclude-leave;
+        }*/
+    </style>
+</head>
+<body>
+    <div ng-init="template.url='/home.html'"
+            ng-controller="HomeController">
+        <button ng-click="template.url='/home.html'">Home</button>
+        <button ng-click="template.url='/second.html'">Second</button>
+        <button ng-click="template.url='/third.html'">Third</button>
+        <div class="animateInclude" ng-include="template.url"></div>
+    </div>
+<script src="../js/lib/jquery.min.js"></script>
+<script src="../js/lib/angular.min.js"></script>
+<script src="../js/lib/angular-animate.min.js"></script>
+
+    <!--这里我们在页面中包含内联模板（只是为了演示）-->
+    <script type="text/ng-template" id="/home.html">Home Template</script>
+    <script type="text/ng-template" id="/second.html">Second Template</script>
+    <script type="text/ng-template" id="/third.html">Third Template</script>
+
+
+<script type="text/javascript">
+    angular.module('myApp',['ngAnimate']).
+            controller('HomeController',['$scope', function($scope){}]).
+    animation('.animateInclude', function(){
+                return {
+                    enter: function(element, done){
+                        $(element).css({
+                            opacity: 0
+                        });
+                        $(element).animate({
+                            opacity: 1
+                        },done);
+                    },
+                    leave: function(element, done){
+                        done();
+                    }
+
+                };
+            });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .nav-btn, .nav-btn li {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-btn {
+            font-size: 0;
+            letter-spacing: -4px;
+            word-spacing: -4px;
+        }
+
+        .nav-btn li {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #ffb36f;
+            color: #fff;
+            border: 1px solid #eee;
+
+            font-size: 14px;
+            letter-spacing: normal;
+            word-spacing: normal;
+        }
+
+        .nav-btn li.active {
+            background-color: #8b2905;
+        }
+
+        .nav-btn li a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .box {
+            width: 400px;
+            height: 200px;
+            border: 1px solid #eee;
+            margin-top: 10px;
+        }
+
+
+        /*1.css3过渡*/
+        /*.animateView.ng-enter,
+        .animateView.ng-leave {
+            -webkit-transition: 1s linear all;
+            -moz-transition: 1s linear all;
+            -ms-transition: 1s linear all;
+            -o-transition: 1s linear all;
+            transition: 1s linear all;
+        }
+
+        .animateView.ng-enter {
+            opacity: 0;
+            color: red;
+        }
+
+        .animateView.ng-enter.ng-enter-active {
+            opacity: 1;
+            color: black;
+        }
+
+        .animateView.ng-leave {}
+        .animateView.ng-leave.ng-leave-active {
+            opacity: 0;
+        }*/
+
+        /*2.css3关键帧动画*/
+        /*@keyframes animateView-enter {
+            from {
+                opacity: 0;
+                color: red;
+            }
+            to {
+                opacity: 1;
+                color: black;
+            }
+        }
+
+        @-webkit-keyframes animateView-enter {
+            from {
+                opacity: 0;
+                color: red;
+            }
+            to {
+                opacity: 1;
+                color: black;
+            }
+        }
+
+        @keyframes animateView-leave {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @-webkit-keyframes animateView-leave {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .animateView.ng-enter {
+            -webkit-animation: 2s animationView-enter;
+            -o-animation: 2s animationView-enter;
+            animation: 2s animationView-enter;
+        }
+
+        .animateView.ng-leave {
+            -webkit-animation: 2s animationView-leave;
+            -o-animation: 2s animationView-leave;
+            animation: 2s animationView-leave;
+        }*/
+
+
+
+    </style>
+</head>
+<body>
+<ul class="nav-btn">
+    <li class="active"><a href="#!/">Home</a></li>
+    <li><a href="#!/two">Second view</a></li>
+    <li><a href="#!/three">Third view</a></li>
+</ul>
+
+<div class="box">
+    <div class="animateView" ng-view></div>
+</div>
+
+<script src="../js/lib/jquery.min.js"></script>
+<script src="../js/lib/angular.min.js"></script>
+<script src="../js/lib/angular-animate.min.js"></script>
+<script src="../js/lib/angular-route.min.js"></script>
+
+<script type="text/javascript">
+    angular.module('myApp',['ngAnimate','ngRoute']).
+            config(['$locationProvider','$routeProvider',function($locationProvider,$routeProvider){
+                $locationProvider.hashPrefix('!');
+                $routeProvider.
+                        when('/',{
+                            template: '<h2>one</h2>'
+                        }).
+                        when('/two',{
+                            template: '<h2>two</h2>'
+                        }).
+                        when('/three',{
+                            template: '<h2>three</h2>'
+                        }).
+                        otherwise('/');
+            }]).
+            animation('.animateView', function(){
+                return {
+                    enter: function(element, done){
+                        $(element).css("opacity",0);
+                        $(element).animate({
+                            opacity: 1
+                        },done);
+                    },
+                    leave: function(element, done){
+                        done();
+                    }
+
+                };
+            });
+
+    // 如果jQuery库在其他库之前就导入了，那么可以直接使用"jQuery"来做一些jQuery的工作
+    jQuery(function($){
+        $('.nav-btn li a').click(function(){
+            $(this).parent().addClass('active').siblings().removeClass('active');
+        });
+    });
+
+
+</script>
+</body>
+</html>

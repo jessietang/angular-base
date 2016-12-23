@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ng-controller="myController">
+<p>1.currency: {{123 | currency}}</p>
+
+<p>2.date: {{today.time | date:'medium'}}</p>
+
+<p>3.filter:经常在做客户端收索时，可以从一个数组中立刻过滤出所需的结果。</p>
+<input type="text" ng-model="searchText"/>
+<ul>
+    <li ng-repeat="list in listArray | filter:-searchText">
+        name:{{list.name}};
+        age:{{list.age}}
+    </li>
+</ul>
+<p>也可以用自定义函数过滤,isCapitalized函数的功能是根据首字母是否大写返回true或者false</p>
+<p>{{['Aa','like','To','TRL'] | filter:isCapitalized}}</p>
+
+<p>4.json过滤器可以将一个JSON或者JavaScript对象转换成字符串</p>
+<p>{{{'name':'jessie','city':'chengdu'} | json}}</p>
+
+<p>5.limitTo</p>
+<p>前三个字符：{{'this is a place rof us to learn english' | limitTo:3}}</p>
+<p>最后七个字符{{'this is a place rof us to learn english' | limitTo:-7}}</p>
+<p>对数组也可以进行同样的操作：{{['a','b','c','d'] | limitTo:1}}</p>
+
+<p>6.lowercase 注意单词写法，是小写哦！</p>
+<p>{{'She Is a nice GIRL.' | lowercase}}</p>
+
+<p>7.number将数字格式化成文本，他的第二个参数是可选的，用来控制小数点后截取的位数。</p>
+<p>{{123344.52345 | number}} 默认保留三位小数？？？</p>
+<p>{{123344.52345 | number:4}}</p>
+
+<p>8.orderBy 我们可以传入+或者-来强制进行升序或降序</p>
+<ul>
+    <li ng-repeat="list in listArray | orderBy:'-age'">
+        name:{{list.name}};
+        age:{{list.age}}
+    </li>
+</ul>
+
+<p>9.uppercase</p>
+<p>{{'this is just a test.' | uppercase}}</p>
+<script src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+angular.module('myApp',[]).
+        controller('myController',['$scope', function($scope){
+            $scope.today = {
+                time: new Date()
+            };
+
+            $scope.listArray = [
+                {
+                    name:'aaa',
+                    age:'23'
+                },
+                {
+                    name:'bbb',
+                    age:'24'
+                },
+                {
+                    name:'abc',
+                    age:'25'
+                }
+
+            ];
+
+            $scope.isCapitalized = function(str){
+                return str.charAt(0) == str.charAt(0).toUpperCase();
+            }
+        }]);
+</script>
+</body>
+</html>

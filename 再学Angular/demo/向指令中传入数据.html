@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div my-directive1 some-attr="http://google.com" my-link-text="click me to go to google."></div>
+
+<br/><br/>
+<label for="">their url field:</label>
+<input type="text" ng-model="theirUrl"/>
+<div my-directive2
+     some-attr="theirUrl"
+        my-link-text="click me to go to google"></div>
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp',[])
+            .directive('myDirective1', function(){
+                return {
+                    restrict: 'A',/*A: attribute属性*/
+                    replace: true,
+                    scope: {
+                        myUrl: '@someAttr',
+                        myLinkText: '@'
+                    },
+                    template: '<a href="{{myUrl}}">{{myLinkText}}</a>'
+                };
+            })
+            .directive('myDirective2', function(){/*理解双向数据绑定*/
+                return {
+                    restrict: 'A',
+                    replace: true,
+                    scope: {
+                        myUrl: '=someAttr',
+                        myLinkText: '@'
+                    },
+                    template: '<div>' +
+                    '<label for="">my url field:</label>' +
+                    '<input type="text" ng-model="myUrl"/>' +
+                    '<a href="{{myUrl}}">{{myLinkText}}</a>' +
+                    '</div>'
+                }
+            });
+</script>
+</body>
+</html>

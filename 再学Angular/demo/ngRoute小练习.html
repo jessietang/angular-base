@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .nav-btn, .nav-btn li {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-btn {
+            font-size: 0;
+            letter-spacing: -4px;
+            word-spacing: -4px;
+        }
+
+        .nav-btn li {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #ffb36f;
+            color: #fff;
+            border: 1px solid #eee;
+
+            font-size: 14px;
+            letter-spacing: normal;
+            word-spacing: normal;
+        }
+
+        .nav-btn li.active {
+            background-color: #8b2905;
+        }
+
+        .nav-btn li a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .box {
+            width: 400px;
+            height: 200px;
+            border: 1px solid #eee;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<ul class="nav-btn">
+    <li class="active"><a href="#!/">Home</a></li>
+    <li><a href="#!/two">Second view</a></li>
+    <li><a href="#!/three">Third view</a></li>
+</ul>
+
+<div class="box">
+    <div ng-view></div>
+</div>
+
+<script type="text/javascript" src="../js/lib/jquery.min.js"></script><!--jquery库在其他库之前引入-->
+<script src="../js/lib/angular.min.js"></script>
+<script src="../js/lib/angular-route.min.js"></script>
+
+<script type="text/javascript">
+    // 如果jQuery库在其他库之前就导入了，那么可以直接使用"jQuery"来做一些jQuery的工作
+    jQuery(function($){
+        $('.nav-btn li a').click(function(){
+            $(this).parent().addClass('active').siblings().removeClass('active');
+        });
+    });
+
+
+    angular.module('myApp',['ngRoute']).
+            config(['$locationProvider','$routeProvider',function($locationProvider,$routeProvider){
+                $locationProvider.hashPrefix('!');
+                $routeProvider.
+                        when('/',{
+                            template: '<h2>one</h2>'
+                        }).
+                        when('/two',{
+                            template: '<h2>two</h2>'
+                        }).
+                        when('/three',{
+                            template: '<h2>three</h2>'
+                        }).
+                        otherwise('/');
+            }]);
+
+</script>
+</body>
+</html>

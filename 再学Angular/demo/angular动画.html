@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+
+        @keyframes firstAnimation {
+            0% {
+                color: yellow;
+            }
+            100% {
+                color: red;
+            }
+        }
+
+        @-webkit-keyframes firstAnimation {
+            0% {
+                color: yellow;
+            }
+            100% {
+                color: red;
+            }
+        }
+
+        .fade-in:hover {
+            -webkit-animation: 3s firstAnimation;
+            -o-animation: 3s firstAnimation;
+            animation: 3s firstAnimation;
+        }
+
+        /*.fade-in.ng-enter {
+            -webkit-animation: 3s firstAnimation;
+            -o-animation: 3s firstAnimation;
+            animation: 3s firstAnimation;
+        }*/
+    </style>
+</head>
+<body ng-controller="myController">
+
+<div class="fade-in">1111111111111</div>
+
+
+
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript" src="../js/lib/angular-animate.min.js"></script>
+<script type="text/javascript">
+    var app = angular.module('myApp',['ngAnimate']);
+    app.controller('myController',[function(){
+
+    }]);
+</script>
+</body>
+</html>

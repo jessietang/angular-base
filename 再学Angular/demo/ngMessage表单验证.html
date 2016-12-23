@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Angular1.3+，使用ngMessages来进行表单验证</title>
+</head>
+<body>
+<!--novalidate: 屏蔽浏览器对表单的默认验证行为-->
+<form action="" ng-controller="signupController" name="signup_form" novalidate ng-submit="signupForm()">
+    <fieldset>
+        <legend>Signup</legend>
+        <div class="row">
+            <div>
+                <label for="">Your name</label>
+                <input type="text" placeholder="name" name="name" ng-model="signup.name"
+                        ng-minlength="3" ng-maxlength="20" required/>
+            </div>
+            <div style="color:red;"  ng-messages="signup_form.name.$error" >
+                <div ng-messages-multiple ng-messages-include="templates/errors.html"></div>
+            </div> <!--这样写才对,给他单独拿个div来装-->
+
+            <!--<div class="error"  ng-messages="signup_form.name.$error"
+                 ng-messages-multiple ng-messages-include="templates/errors.html">
+            </div>--> <!--这样写要报错-->
+        </div>
+        <button type="submit">Submit</button>
+    </fieldset>
+</form>
+
+
+<script type="text/javascript" src="../js/lib/angular.min.js"></script>
+<script type="text/javascript" src="../js/lib/angular-messages.min.js"></script>
+<script type="text/javascript">
+angular.module('myApp',['ngMessages'])
+        .controller('signupController',function($scope){
+            $scope.errorUrl = 'templates/errors.html';
+        });
+
+</script>
+</body>
+</html>
