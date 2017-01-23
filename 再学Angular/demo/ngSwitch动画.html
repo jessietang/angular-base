@@ -1,10 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp">
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <style>
+        /*1.css3过渡*/
+        /*.animateSwitch.ng-enter,
+        .animateSwitch.ng-leave {
+            -webkit-transition: 2s linear all;
+            -moz-transition: 2s linear all;
+            -ms-transition: 2s linear all;
+            -o-transition: 2s linear all;
+            transition: 2s linear all;
+        }
+
+        .animateSwitch.ng-enter {
+            opacity: 0;
+            color: red;
+        }
+
+        .animateSwitch.ng-enter.ng-enter-active {
+            opacity: 1;
+            color: black;
+        }
+
+        .animateSwitch.ng-leave {}
+        .animateSwitch.ng-leave.ng-leave-active {
+            opacity: 0;
+        }*/
+
+
+        /*2.css3动画*/
+        /*@keyframes animateSwitch-enter {
+            from {opacity: 0;}
+            to {opacity: 1;color: red;}
+        }
+
+        @-webkit-keyframes animateSwitch-enter {
+            from {opacity: 0;}
+            to {opacity: 1;color: red;}
+        }
+
+        @keyframes animateSwitch-leave {
+            from {opacity: 1;}
+            to {opacity: 0;color: black;}
+        }
+
+        @-webkit-keyframes animateSwitch-leave {
+            from {opacity: 1;}
+            to {opacity: 0;color: black;}
+        }
+
+        .animateSwitch.ng-enter {
+            -webkit-animation: 2s animateSwitch-enter;
+            -o-animation: 2s animateSwitch-enter;
+            animation: 2s animateSwitch-enter;
+        }
+        .animateSwitch.ng-leave {
+            -webkit-animation: 2s animateSwitch-leave;
+            -o-animation: 2s animateSwitch-leave;
+            animation: 2s animateSwitch-leave;
+        }*/
+    </style>
 </head>
 <body>
+<div ng-init="template='home'" ng-controller="HomeController">
+    <button ng-click="template='home'">Home</button>
+    <button ng-click="template='second'">Second</button>
+    <button ng-click="template='third'">Third</button>
 
+    <div ng-switch="template">
+        <div class="animateSwitch" ng-switch-when="home">
+            <h1>Home</h1>
+        </div>
+
+        <div class="animateSwitch" ng-switch-when="second">
+            <h1>Second</h1>
+        </div>
+
+        <div class="animateSwitch" ng-switch-when="third">
+            <h1>Third</h1>
+        </div>
+    </div>
+
+</div>
+<script src="../js/lib/jquery.min.js"></script>
+<script src="../js/lib/angular.min.js"></script>
+<script src="../js/lib/angular-animate.min.js"></script>
+<script type="text/javascript">
+    angular.module('myApp',['ngAnimate']).
+            controller('HomeController',['$scope', function($scope){}]).
+    animation('.animateSwitch', function(){
+                return {
+                    enter: function(element, done){
+                        $(element).css({/*ReferenceError: $ is not defined  依赖jquery*/
+                            opacity: 0
+                        });
+                        $(element).animate({
+                            opacity: 1
+                        },done);
+                    },
+                    leave: function(element, done){
+                        done();
+                    }
+                };
+            });
+
+</script>
 </body>
 </html>
